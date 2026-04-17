@@ -1,4 +1,1916 @@
-<html>
-  Hello world
-  <img src="rca_screenshot.png"/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telamin - The Control Plane for AI Infrastructure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@500;700;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/webfonts/fa-brands-400.woff2">
+    <style>
+        /* 1. THE SETUP & DEEP-TECH AESTHETIC */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #05080f; /* Deepest Midnight */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling to create true presentation mode */
+        }
+
+        .slide-container {
+            display: none; /* Hide all slides by default */
+            align-items: center;
+            background-color: #0b1120; /* Deep Midnight Blue */
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.05);
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            height: 720px;
+            justify-content: flex-start;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+            width: 1280px;
+        }
+
+        .slide-container.active {
+            display: flex; /* Show only active slide */
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .slide-container.bleed-image-layout.active {
+            display: grid; /* Specific override for the title slide layout */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Abstract Blueprint Background Overlay */
+        .slide-container::before {
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+            background-size: 40px 40px;
+            content: '';
+            height: 100%;
+            left: 0;
+            opacity: 0.3;
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. CONSISTENT TYPOGRAPHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #f8fafc;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle,
+        .slide-container .chart-summary {
+            color: #cbd5e1;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .tech-font {
+            font-family: 'Roboto Mono', monospace;
+            color: #ccff00; /* Electric Lime */
+        }
+
+        .slide-container h1 {
+            font-size: 56px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .slide-container .slide-title {
+            align-self: flex-start;
+            border-bottom: 2px solid #00e5ff; /* Cyber Blue Accent */
+            color: #ffffff;
+            font-size: 32px;
+            margin-bottom: 40px;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        .slide-container h3 {
+            color: #00e5ff;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .slide-container .subtitle {
+            font-size: 22px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+
+        .slide-container .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* 3. LAYOUT DEFINITIONS */
+        .bento-box {
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 40px;
+        }
+
+        .two-column {
+            display: grid;
+            gap: 50px;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            align-items: center;
+        }
+
+        .two-column.tiled {
+            align-items: stretch;
+        }
+
+        .image-wrapper {
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            height: 380px;
+            overflow: hidden;
+            width: 100%;
+            background-color: #0f172a;
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+            opacity: 0.85; /* Blend with dark mode */
+            mix-blend-mode: lighten;
+        }
+
+        /* Tiled Layouts */
+        .tiled-content {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .tile {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 35px;
+            text-align: left;
+        }
+
+        .tile .icon {
+            color: #00e5ff;
+            font-size: 40px;
+            margin-bottom: 25px;
+        }
+
+        /* Lists */
+        .bullet-list {
+            width: 100%;
+        }
+        .bullet-list ul {
+            list-style: none;
+        }
+        .bullet-list li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 25px;
+            font-size: 20px;
+        }
+        .bullet-list i {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            color: #ccff00;
+            font-size: 24px;
+        }
+        .bullet-list li strong {
+            color: #f8fafc;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Highlighted Numbers */
+        .highlight-numbers-layout {
+            align-items: center;
+        }
+        .highlight-numbers-layout > div:first-child {
+            text-align: center;
+            border-right: 2px solid #1e293b;
+            padding-right: 50px;
+        }
+        .highlight-numbers-layout > div:last-child {
+            padding-left: 10px;
+        }
+        .highlight-numbers-layout .number {
+            color: #ccff00;
+            font-size: 140px;
+            font-weight: 700;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(204, 255, 0, 0.2);
+            margin-bottom: 10px;
+        }
+        .highlight-numbers-layout .number-label {
+            color: #00e5ff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Tiled Images */
+        .image-tile {
+            flex: 1;
+            text-align: center;
+        }
+        .image-tile .image-wrapper {
+            height: 200px;
+            margin-bottom: 25px;
+            border-color: #00e5ff;
+        }
+
+        /* Bleed Image Layout */
+        .slide-container.bleed-image-layout {
+            align-items: start;
+            gap: 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+        }
+        .slide-container.bleed-image-layout > .content-container {
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(90deg, #0b1120 0%, rgba(11, 17, 32, 0.9) 100%);
+            z-index: 2;
+        }
+        .slide-container.bleed-image-layout > .image-container {
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+        .slide-container.bleed-image-layout img.bleed-image-side,
+        .slide-container.bleed-image-layout svg.bleed-image-side {
+            display: block;
+            height: 720px;
+            object-fit: cover;
+            width: 100%;
+            opacity: 0.6;
+            mix-blend-mode: screen;
+        }
+        .slide-container.bleed-image-layout .tech-tag {
+            display: inline-block;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid #00e5ff;
+            color: #00e5ff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Charts & Visualizations */
+        .area-chart-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        .area-chart-svg {
+            width: 100%;
+            height: 350px;
+            overflow: visible;
+        }
+        .area-chart-svg .grid line {
+            stroke: #1e293b;
+            stroke-width: 1;
+        }
+        .area-chart-svg .area-fill {
+            fill: url(#area-gradient);
+            stroke: none;
+        }
+        .area-chart-svg .line-stroke {
+            fill: none;
+            stroke: #00e5ff;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+        .area-chart-svg .data-point {
+            fill: #05080f;
+            stroke: #ccff00;
+            stroke-width: 3;
+        }
+        .area-chart-svg .axis-labels text {
+            fill: #64748b;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Timeline Layout */
+        .timeline-layout {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #1e293b;
+            transform: translateY(-1px);
+            z-index: 0;
+        }
+        .timeline-item {
+            width: 24%;
+            position: relative;
+            text-align: center;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            background-color: #05080f;
+            border: 4px solid #00e5ff;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+        }
+        .timeline-item:nth-child(even):after {
+            border-color: #ccff00;
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+        }
+        .timeline-item .content-wrapper {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid #1e293b;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        .timeline-item:nth-child(odd) .content-wrapper {
+            bottom: 50%;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #00e5ff;
+        }
+        .timeline-item:nth-child(even) .content-wrapper {
+            top: 50%;
+            margin-top: 40px;
+            border-top: 2px solid #ccff00;
+        }
+        .timeline-item h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .timeline-item p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px; 
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+        .comparison-table th {
+            color: #00e5ff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px; 
+            text-transform: uppercase;
+        }
+        .comparison-table td {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        .comparison-table tr:hover {
+            background-color: rgba(30, 41, 59, 0.5);
+        }
+        .highlight-row {
+            background-color: rgba(0, 229, 255, 0.05);
+            border-left: 4px solid #00e5ff;
+        }
+        .check-icon {
+            color: #ccff00;
+            margin-right: 5px;
+        }
+        .cross-icon {
+            color: #ef4444;
+            margin-right: 5px;
+        }
+        .ask-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+        }
+
+        /* Presentation Hint */
+        html {
+            scroll-behavior: smooth;
+        }
+        .presentation-hint {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(11, 17, 32, 0.8);
+            border: 1px solid #1e293b;
+            color: #94a3b8;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Market Opportunity Optimized Styles */
+        .market-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .market-table th, .market-table td {
+            padding: 8px 0;
+            border-bottom: 1px solid #1e293b;
+            text-align: left;
+            vertical-align: middle;
+            line-height: 1.4;
+        }
+        .market-table th {
+            color: #00e5ff;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 6px 0 10px 0;
+        }
+        .market-table td {
+            color: #cbd5e1;
+        }
+        .market-table .source-citation {
+            display: block;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 9px;
+            color: #64748b;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+        .new-category-row {
+            background: linear-gradient(90deg, rgba(204,255,0,0.08) 0%, transparent 100%);
+            border-left: 3px solid #ccff00;
+        }
+        .new-category-row td {
+            font-weight: 600;
+            color: #f8fafc;
+            padding-left: 8px; /* Offset the left border */
+        }
+        .new-category-badge {
+            display: inline-block;
+            background: rgba(204, 255, 0, 0.2);
+            color: #ccff00;
+            border: 1px solid #ccff00;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-family: 'Roboto Mono', monospace;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .total-row td {
+            border-top: 2px solid #1e293b;
+            border-bottom: none;
+            font-weight: 700;
+            color: #f8fafc;
+            font-size: 15px;
+            padding: 10px 0 4px 0;
+        }
+        
+        .bullseye-graphic {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 8px;
+            letter-spacing: 1px;
+        }
+        .ring-tam {
+            border-color: rgba(30, 41, 59, 0.8);
+            background: rgba(30, 41, 59, 0.2);
+            color: #64748b;
+        }
+        .ring-sam {
+            border-color: rgba(0, 229, 255, 0.6);
+            background: rgba(0, 229, 255, 0.1);
+            color: #00e5ff;
+        }
+        .ring-som {
+            border-color: #ccff00;
+            background: rgba(204, 255, 0, 0.2);
+            color: #ccff00;
+            align-items: center;
+            padding-top: 0;
+            box-shadow: 0 0 15px rgba(204, 255, 0, 0.3);
+            font-size: 8px;
+        }
+
+        /* PRINT AND EXPORT FIXES — required for headless Chrome --print-to-pdf.
+           Do not remove. See deck_print_css_instructions.md. */
+        @media print {
+            @page {
+                size: 1280px 720px;   /* 16:9 page matching the on-screen slide */
+                margin: 0;
+            }
+            html, body {
+                display: block;
+                height: auto;
+                overflow: visible;
+                background-color: #05080f !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .slide-container {
+                display: flex !important;       /* override .slide-container { display: none } */
+                flex-direction: column !important;
+                opacity: 1 !important;
+                transform: none !important;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                position: relative;
+                margin: 0;
+                width: 1280px !important;
+                height: 720px !important;
+                min-height: 720px !important;
+                max-height: 720px !important;
+                overflow: hidden !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .slide-container.bleed-image-layout {
+                display: grid !important;       /* restore grid layout for the title slide */
+            }
+            .slide-container:last-of-type {
+                page-break-after: auto !important;
+                break-after: auto !important;   /* prevent a trailing blank page */
+            }
+            /* Force .content-area to actually fill — Chrome's print engine will
+               otherwise collapse flex-grow children to zero and erase the slide body. */
+            .slide-container .content-area {
+                display: flex !important;
+                flex-direction: column !important;
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                width: 100% !important;
+            }
+            .slide-container .content-area .bento-box,
+            .slide-container .content-area .two-column,
+            .slide-container .content-area .comparison-table {
+                flex-shrink: 0 !important;
+            }
+            .presentation-hint {
+                display: none !important;       /* hide the "Use ← → keys" overlay */
+            }
+            /* Kill animations/transitions so Chrome captures settled layout. */
+            *, *::before, *::after {
+                animation: none !important;
+                animation-duration: 0s !important;
+                animation-delay: 0s !important;
+                transition: none !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
+            }
+            /* backdrop-filter is broken in Chrome's print rasteriser — elements
+               using it render as empty. Neutralise it and promote the fallback
+               background so bento boxes remain opaque. */
+            *, *::before, *::after {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+
+            /* ------------------------------------------------------------------
+               PRINT PANEL TREATMENT — deterministic, rasteriser-safe.
+
+               Prior attempts used rgba() alphas (0.25 / 0.55) to fake glass
+               translucency. Chrome's --print-to-pdf rasteriser flattens those
+               inconsistently against the slide's ::before grid, which is why
+               panels on Slides 3/4/7/9 rendered as heavy opaque rectangles.
+
+               This version: panels are a SLIGHTLY-LIFTED solid colour so they
+               read as distinctly lighter than the #0b1120 slide background,
+               plus a 1px inset shadow that reinforces the panel edge. No
+               alpha compositing against pseudo-elements, no Chrome surprises.
+               ------------------------------------------------------------------ */
+
+            /* Glass panels — solid lifted colour, no alpha. #141d33 sits
+               ~3 steps lighter than the #0b1120 slide and reads as a clean
+               panel in the PDF rasteriser. */
+            .bento-box,
+            .tile {
+                background-color: #141d33;
+                background-image: none;
+                box-shadow: inset 0 0 0 1px rgba(30, 41, 59, 0.9);
+            }
+
+            /* Slide 9 — timeline wrappers are NOT .bento-box; treat identically. */
+            .timeline-item .content-wrapper {
+                background: #141d33;
+                background-image: none;
+                box-shadow: inset 0 0 0 1px rgba(30, 41, 59, 0.9);
+            }
+
+            /* Slide 6 area chart container — same lifted treatment. */
+            .area-chart-container {
+                background: #141d33;
+                background-image: none;
+            }
+
+            /* Slide 3 — return-loop label pill sits over the dashed curved
+               return path. Must be solid for legibility. Same treatment
+               as the circles: use the slide bg so it reads as a clean
+               label floating over the path, not a sticker. */
+            #slide3 span[style*="background-color: #0b1120"],
+            #slide3 span[style*="background-color:#0b1120"] {
+                background-color: #0b1120 !important;
+            }
+
+            /* Neutralise the ::before grid in print. It was intended as
+               "glass over grid" texture, but at opacity 0.3 * 0.4 alpha
+               it renders as invisible noise in the rasteriser and only
+               adds risk of flattening artefacts. */
+            .slide-container::before {
+                display: none !important;
+            }
+
+            /* ------------------------------------------------------------------
+               ACCENT STRIPS — border-left accent with a faint fill.
+
+               Six elements across Slides 6.5, 8, 10, 11 use the pattern
+                 border-left: 3px solid [#00e5ff|#ccff00];
+                 background: rgba([cyan|lime], 0.04–0.05);
+               On screen, the fill is near-invisible (the border carries the
+               weight). In Chrome's print rasteriser the low alpha flattens
+               brighter than intended, so the strips read as opaque cyan/lime
+               panels rather than border-accented callouts.
+
+               Fix: match via attribute selector on the border-left colour,
+               swap the rgba() fill for a solid very-dark-tinted colour that
+               preserves the "this strip is cyan/lime accented" signal
+               without rasteriser over-brightening.
+               ------------------------------------------------------------------ */
+
+            /* Lime-accented strips → solid dark lime-tinted bg (#14190a = rgb(20,25,10)) */
+            div[style*="border-left: 3px solid #ccff00"],
+            div[style*="border-left:3px solid #ccff00"] {
+                background: #14190a;
+                background-color: #14190a;
+                background-image: none;
+            }
+
+            /* Cyan-accented strips → solid dark cyan-tinted bg (#0a1a1f = rgb(10,26,31)) */
+            div[style*="border-left: 3px solid #00e5ff"],
+            div[style*="border-left:3px solid #00e5ff"] {
+                background: #0a1a1f;
+                background-color: #0a1a1f;
+                background-image: none;
+            }
+
+            /* Slide 8 — Regulated Agentic Behaviour highlight row.
+               Base CSS uses a linear-gradient with rgba(204,255,0,0.08) which
+               Chrome's print rasteriser renders as a harsh lime wash across
+               the row. Replace with a solid dark lime tint matching the
+               accent strips above. The border-left: 3px solid #ccff00 stays. */
+            .new-category-row {
+                background: #14190a;
+                background-image: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> keys to navigate</div>
+
+<!-- Slide 1: Title_Slide -->
+<div class="slide-container bleed-image-layout" id="slide1">
+    <div class="content-container">
+        <div class="tech-tag">SYSTEM_INIT: TELAMIN_OS</div>
+        <h1>Predictable AI<br>Infrastructure</h1>
+
+        <!-- Forwardable proof-points strap — dot-separated monospace, reads as a signature line -->
+        <p style="font-family: 'Roboto Mono', monospace; font-size: 13px; color: #ccff00; letter-spacing: 1px; margin-top: -8px; margin-bottom: 22px; line-height: 1.5;">
+            COMPILED&nbsp;GOVERNANCE&nbsp;FOR&nbsp;AUTONOMOUS&nbsp;AI &nbsp;·&nbsp;
+            GRANTED&nbsp;US&nbsp;PATENT &nbsp;·&nbsp;
+            LIVE&nbsp;IN&nbsp;PRODUCTION &nbsp;·&nbsp;
+            MOD&nbsp;/&nbsp;NATO&nbsp;PIPELINE
+        </p>
+
+        <div class="bleed-text-side">
+            <p style="color: #f8fafc; font-size: 22px; font-weight: 500; margin-bottom: 12px; line-height: 1.4;">A deterministic execution layer for AI systems in environments where correctness matters.</p>
+            <p>Telamin is the system that audits, validates, and governs how AI systems change.</p>
+            <p style="color: #00e5ff; font-weight: 600; letter-spacing: 1px;">ATOMIC GOVERNANCE AT INFERENCE SPEED</p>
+        </div>
+    </div>
+    <div class="image-container" style="position: relative;">
+        <!-- NEW INLINE SVG -->
+        <svg class="bleed-image-side" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; display: block; background: radial-gradient(circle at 50% 50%, #0b1120 0%, #05080f 100%);" role="img" aria-label="Abstract architectural diagram: AI-designed behaviour graph compiled into a deterministic execution kernel">
+            <defs>
+                <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="glow-lime" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+            </defs>
+
+            <!-- Subtle grid -->
+            <g stroke="#1e293b" stroke-width="0.5" opacity="0.5">
+                <line x1="0" y1="100" x2="400" y2="100"/>
+                <line x1="0" y1="200" x2="400" y2="200"/>
+                <line x1="0" y1="300" x2="400" y2="300"/>
+                <line x1="0" y1="500" x2="400" y2="500"/>
+                <line x1="0" y1="600" x2="400" y2="600"/>
+                <line x1="0" y1="700" x2="400" y2="700"/>
+                <line x1="100" y1="0" x2="100" y2="800"/>
+                <line x1="200" y1="0" x2="200" y2="800"/>
+                <line x1="300" y1="0" x2="300" y2="800"/>
+            </g>
+
+            <!-- (A) Label -->
+            <text x="30" y="50" fill="#00e5ff" font-family="'Roboto Mono', monospace" font-size="14" font-weight="700" letter-spacing="2">(A)</text>
+            <text x="60" y="50" fill="#cbd5e1" font-family="'Montserrat', sans-serif" font-size="11" font-weight="600" letter-spacing="1.5">BEHAVIOUR GRAPH</text>
+
+            <!-- (A) Organic DAG — cyan, loose layout -->
+            <g stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.85">
+                <line x1="90" y1="140" x2="180" y2="100"/>
+                <line x1="90" y1="140" x2="160" y2="210"/>
+                <line x1="180" y1="100" x2="290" y2="160"/>
+                <line x1="180" y1="100" x2="260" y2="220"/>
+                <line x1="160" y1="210" x2="260" y2="220"/>
+                <line x1="160" y1="210" x2="220" y2="300"/>
+                <line x1="290" y1="160" x2="340" y2="240"/>
+                <line x1="260" y1="220" x2="340" y2="240"/>
+                <line x1="220" y1="300" x2="300" y2="330"/>
+                <line x1="340" y1="240" x2="300" y2="330"/>
+            </g>
+            <g fill="#00e5ff" filter="url(#glow-cyan)">
+                <circle cx="90"  cy="140" r="6"/>
+                <circle cx="180" cy="100" r="6"/>
+                <circle cx="160" cy="210" r="6"/>
+                <circle cx="290" cy="160" r="6"/>
+                <circle cx="260" cy="220" r="6"/>
+                <circle cx="220" cy="300" r="6"/>
+                <circle cx="340" cy="240" r="6"/>
+                <circle cx="300" cy="330" r="6"/>
+            </g>
+
+            <!-- Compilation transition -->
+            <g>
+                <line x1="200" y1="380" x2="200" y2="440" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <polygon points="200,450 193,438 207,438" fill="#94a3b8"/>
+                <rect x="130" y="395" width="140" height="22" fill="#0b1120" stroke="#1e293b" stroke-width="1" rx="4"/>
+                <text x="200" y="410" fill="#94a3b8" font-family="'Roboto Mono', monospace" font-size="10" font-weight="600" letter-spacing="2" text-anchor="middle">AOT COMPILE</text>
+            </g>
+
+            <!-- (B) Label -->
+            <text x="30" y="500" fill="#ccff00" font-family="'Roboto Mono', monospace" font-size="14" font-weight="700" letter-spacing="2">(B)</text>
+            <text x="60" y="500" fill="#cbd5e1" font-family="'Montserrat', sans-serif" font-size="11" font-weight="600" letter-spacing="1.5">EXECUTION KERNEL</text>
+
+            <!-- (B) Compiled lattice — lime, regular geometric grid -->
+            <g stroke="#ccff00" stroke-width="1.5" opacity="0.9">
+                <!-- Horizontal rails -->
+                <line x1="80"  y1="560" x2="320" y2="560"/>
+                <line x1="80"  y1="640" x2="320" y2="640"/>
+                <line x1="80"  y1="720" x2="320" y2="720"/>
+                <!-- Vertical rails -->
+                <line x1="80"  y1="560" x2="80"  y2="720"/>
+                <line x1="160" y1="560" x2="160" y2="720"/>
+                <line x1="240" y1="560" x2="240" y2="720"/>
+                <line x1="320" y1="560" x2="320" y2="720"/>
+                <!-- Diagonal accents -->
+                <line x1="80"  y1="560" x2="160" y2="640" stroke-dasharray="3,3" opacity="0.5"/>
+                <line x1="160" y1="640" x2="240" y2="720" stroke-dasharray="3,3" opacity="0.5"/>
+                <line x1="240" y1="560" x2="320" y2="640" stroke-dasharray="3,3" opacity="0.5"/>
+            </g>
+            <g fill="#ccff00" filter="url(#glow-lime)">
+                <rect x="76"  y="556" width="8" height="8"/>
+                <rect x="156" y="556" width="8" height="8"/>
+                <rect x="236" y="556" width="8" height="8"/>
+                <rect x="316" y="556" width="8" height="8"/>
+                <rect x="76"  y="636" width="8" height="8"/>
+                <rect x="156" y="636" width="8" height="8"/>
+                <rect x="236" y="636" width="8" height="8"/>
+                <rect x="316" y="636" width="8" height="8"/>
+                <rect x="76"  y="716" width="8" height="8"/>
+                <rect x="156" y="716" width="8" height="8"/>
+                <rect x="236" y="716" width="8" height="8"/>
+                <rect x="316" y="716" width="8" height="8"/>
+            </g>
+
+            <!-- Footer tag -->
+            <text x="200" y="780" fill="#64748b" font-family="'Roboto Mono', monospace" font-size="9" letter-spacing="2" text-anchor="middle">DETERMINISTIC · REPRODUCIBLE · AUDITABLE</text>
+        </svg>
+
+        <div style="position: absolute; bottom: 30px; left: 30px; background: rgba(11, 17, 32, 0.8); padding: 15px; border-radius: 8px; border: 1px solid #1e293b; backdrop-filter: blur(5px);">
+            <p style="color: #cbd5e1; font-size: 14px; margin-bottom: 5px;"><strong style="color: #00e5ff;">(A)</strong> AI-designed behaviour graph</p>
+            <p style="color: #cbd5e1; font-size: 14px;"><strong style="color: #ccff00;">(B)</strong> Compiled execution kernel</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Trust Gap -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">The Trust Gap in Autonomous AI</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-robot"></i></div>
+                <h3>The Reality</h3>
+                <p>AI systems are evolving rapidly into autonomous agents but remain fundamentally unpredictable, computationally expensive, and difficult for enterprises to trust.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <h3>The Failure</h3>
+                <p>Current models rely strictly on trial-and-error methodologies, making resulting outcomes inconsistent, unrepeatable, and impossible to formally verify.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>The Barrier</h3>
+                <p>Enterprises cannot safely deploy these unpredictable systems in mission-critical environments where correctness, safety, and strict compliance are required.</p>
+            </div>
+        </div>
+        <div class="bento-box" style="margin-top: 40px; padding: 25px 40px; border-left: 4px solid #00e5ff;">
+            <p style="color: #f8fafc; font-size: 20px; font-style: italic;">"IDC predicts 60% of AI failures by 2026 will stem from governance gaps, not model performance."</p>
+        </div>
+        <p style="text-align: center; color: #ccff00; font-size: 17px; margin-top: 22px; font-weight: 500; letter-spacing: 0.5px;">AI is entering systems where failure is not acceptable — current infrastructure cannot support that.</p>
+    </div>
+</div>
+
+<!-- Slide 3: Lifecycle Flow -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title" style="margin-bottom: 5px; border-bottom: none; padding-bottom: 0;">How Telamin Governs AI Behaviour</h2>
+    <p class="subtitle" style="margin-top: 0; font-size: 16px; color: #94a3b8; margin-bottom: 20px; width: 100%;">A closed loop where only validated behaviour runs, and every execution makes the next one better.</p>
+    
+    <div class="content-area" style="justify-content: center; align-items: center; position: relative; flex-grow: 1; height: 320px; width: 100%;">
+        
+        <!-- SVG connecting lines -->
+        <svg viewBox="0 0 1160 300" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none;">
+            <!-- Main Horizontal Line -->
+            <line x1="82" y1="90" x2="1077" y2="90" stroke="#1e293b" stroke-width="2" />
+            
+            <!-- Main Line Arrowheads -->
+            <polygon points="168,90 158,85 158,95" fill="#1e293b" />
+            <polygon points="333,90 323,85 323,95" fill="#1e293b" />
+            <polygon points="499,90 489,85 489,95" fill="#1e293b" />
+            <polygon points="665,90 655,85 655,95" fill="#1e293b" />
+            <polygon points="830,90 820,85 820,95" fill="#1e293b" />
+            <polygon points="996,90 986,85 986,95" fill="#1e293b" />
+
+            <!-- Curved Return Loop Line -->
+            <path d="M 1077 120 C 1077 240, 950 240, 580 240 C 200 240, 82 240, 82 125" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="5,5" />
+            
+            <!-- Return Loop Branch to Node 2 -->
+            <path d="M 248 240 L 248 125" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="5,5" />
+
+            <!-- Return Arrowheads (Cyan) -->
+            <polygon points="82,118 77,128 87,128" fill="#00e5ff" />
+            <polygon points="248,118 243,128 253,128" fill="#00e5ff" />
+        </svg>
+        
+        <!-- Label for the return loop -->
+        <div style="position: absolute; top: 230px; left: 50%; transform: translateX(-50%); z-index: 5;">
+            <span style="background-color: #0b1120; padding: 4px 12px; color: #00e5ff; border: 1px solid #00e5ff; border-radius: 12px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap;">Validated behaviour becomes the next generation's default.</span>
+        </div>
+
+        <!-- CSS Grid for the 7 Stages -->
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); width: 100%; height: 100%; position: relative; z-index: 2;">
+            
+            <!-- Stage 1 (Cyan) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #00e5ff; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-pen-ruler"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">1. Design</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">AI agents and human architects compose system behaviour.</div>
+            </div>
+
+            <!-- Stage 2 (Cyan) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #00e5ff; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-puzzle-piece"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">2. Integrate</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Internal logic and third-party components assembled into a single verifiable graph.</div>
+            </div>
+
+            <!-- Stage 3 (Lime, with callout) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="position: absolute; top: 15px; background: transparent; color: #ccff00; padding: 4px 10px; border: 1px solid #ccff00; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 8px; text-transform: uppercase; white-space: nowrap; left: 50%; transform: translateX(-50%);">
+                    POLICY GATE
+                </div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #ccff00; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #ccff00; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">3. Validate</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Structural validation rejects invalid behaviour before it compiles.</div>
+            </div>
+
+            <!-- Stage 4 (Lime, with callout) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="position: absolute; top: 15px; background: transparent; color: #ccff00; padding: 4px 10px; border: 1px solid #ccff00; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 8px; text-transform: uppercase; white-space: nowrap; left: 50%; transform: translateX(-50%);">
+                    SOVEREIGN-READY
+                </div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #ccff00; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #ccff00; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">4. Deploy</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Sealed execution kernel. Zero runtime dependency. No data leakage.</div>
+            </div>
+
+            <!-- Stage 5 (Cyan) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #00e5ff; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">5. Execute</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Deterministic run — 40–90ns, zero heap allocation.</div>
+            </div>
+
+            <!-- Stage 6 (Cyan) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #00e5ff; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); margin-top: 65px; margin-bottom: 15px;">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">6. Audit</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Every decision reproducible, comparable, explainable.</div>
+            </div>
+
+            <!-- Stage 7 (Lime, with callout) -->
+            <div style="display: flex; flex-direction: column; align-items: center; position: relative; padding: 0 10px;">
+                <div style="position: absolute; top: 15px; background: transparent; color: #ccff00; padding: 4px 10px; border: 1px solid #ccff00; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 8px; text-transform: uppercase; white-space: nowrap; left: 50%; transform: translateX(-50%); z-index: 10;">
+                    COMPOUNDING MOAT
+                </div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid #ccff00; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #ccff00; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); margin-top: 65px; margin-bottom: 15px; z-index: 2;">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
+                <div style="color: #f8fafc; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">7. Score & Evolve</div>
+                <div style="color: #cbd5e1; font-size: 10px; line-height: 1.4; text-align: center;">Performance data feeds back into component scoring. The system evolves by selecting proven behaviour — not by retrying.</div>
+            </div>
+
+        </div>
+    </div>
+
+    <p style="text-align: center; color: #64748b; font-size: 12px; margin-top: auto; padding: 15px 0 0 0; border-top: 1px solid #1e293b; width: 100%;">
+        Every stage is measured. Every measurement feeds the next decision. Telamin replaces runtime trial-and-error with compiled, proven, governed behaviour.
+    </p>
+</div>
+
+<!-- Slide 3.5: Competitive Landscape -->
+<div class="slide-container" id="slide-competition">
+    <h2 class="slide-title">Competitive Landscape</h2>
+    <div class="content-area">
+        <div class="bento-box" style="padding: 20px;">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Pre-Execution</th>
+                        <th>Deterministic</th>
+                        <th>Audit & Replay</th>
+                        <th>Agentic Support</th>
+                        <th>Data Privacy</th>
+                        <th>Key Limitation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Apache Flink</strong></td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Event Sourced</td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Self-Hosted</td>
+                        <td>High latency, JVM GC pauses</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LangChain / CrewAI</strong></td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Logs / Traces</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Yes</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Varies (Cloud)</td>
+                        <td>Probabilistic, slow execution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Temporal</strong></td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Partial</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Durable Events</td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> Not AI-Aware</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Varies (Cloud)</td>
+                        <td>Workflow orchestration, not AI governance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Akka</strong></td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-xmark cross-icon"></i> No</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Actor Traces</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Yes</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Self-Hosted</td>
+                        <td>Non-deterministic actor scheduling</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Custom In-House</strong></td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Partial</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Partial</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Custom Build</td>
+                        <td><i class="fa-solid fa-minus" style="color: #94a3b8; margin-right: 5px;"></i> Manual</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Full</td>
+                        <td>Massive R&D & maintenance</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td><strong>Telamin (Fluxtion)</strong></td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Yes</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Yes (40-90ns)</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Atomic</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Native</td>
+                        <td><i class="fa-solid fa-check check-icon"></i> Absolute (On-Prem)</td>
+                        <td>Requires compilation step</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Control Before Execution -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">Control Before Execution</h2>
+    <div class="content-area">
+        <div class="two-column highlight-numbers-layout">
+            <div>
+                <div class="number">40-90<span style="font-size: 60px;">ns</span></div>
+                <div class="number-label">Deterministic Latency</div>
+                <div class="number-label" style="color: #f8fafc; font-size: 16px; margin-top: 15px;">WITH ZERO HEAP ALLOCATION</div>
+                <div class="tech-tag" style="margin-top: 25px; border-color: #1e293b; color: #94a3b8;">VERIFIED_ON: NATIVE_JAVA/OPENJDK_2026</div>
+            </div>
+            <div class="bento-box" style="background: transparent; background-image: none; border: 1px solid #00e5ff; box-shadow: none; backdrop-filter: none;">
+                <h3 style="color: #f8fafc; margin-bottom: 20px;">Governance at the speed of light</h3>
+                <p style="margin-bottom: 15px;"><strong>Resolved Execution:</strong> Unlike traditional runtime monitors, behaviour is resolved into a fixed, immutable execution path prior to deployment.</p>
+                <p style="margin-bottom: 20px;"><strong>Atomic Safety:</strong> Business logic, continuous measurement, and safety constraints are deeply compiled into a single atomic execution gate, ensuring zero performance tax.</p>
+                <p style="color: #ccff00; font-style: italic; font-size: 17px; margin: 0; padding-top: 14px; border-top: 1px solid #1e293b;">The system does not decide what to do at runtime — it already knows.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Flight Recorder -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title" style="margin-bottom: 15px;">The Flight Recorder for AI</h2>
+    <div class="content-area" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+        <div class="two-column" style="gap: 40px; align-items: stretch; height: 100%;">
+            <div class="bento-box bullet-list" style="padding: 28px 32px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin-bottom: 10px; font-size: 18px;">Measurable Infrastructure</h3>
+                <ul style="margin: 0;">
+                    <li style="margin-bottom: 16px; font-size: 14px; line-height: 1.45; padding-left: 0;">
+                        <strong style="margin-bottom: 2px; font-size: 15px;">Reproducible Traces</strong>
+                        Every execution generates a precise trace, allowing enterprises to reproduce and verify behaviour exactly.
+                    </li>
+                    <li style="margin-bottom: 16px; font-size: 14px; line-height: 1.45; padding-left: 0;">
+                        <strong style="margin-bottom: 2px; font-size: 15px;">Root Cause Analysis</strong>
+                        Achieve atomic analysis by programmatically comparing deterministic behaviour paths rather than interpreting messy text logs.
+                    </li>
+                    <li style="margin-bottom: 0; font-size: 14px; line-height: 1.45; padding-left: 0;">
+                        <strong style="margin-bottom: 2px; font-size: 15px;">Behavioural Diff</strong>
+                        Two runs of the same system can be diffed atomically — node-by-node, event-by-event. Regression is detected before it reaches production.
+                    </li>
+                </ul>
+                <div class="tech-tag" style="margin-top: 20px; margin-bottom: 0; border-color: #00e5ff; color: #00e5ff; font-size: 11px; padding: 4px 10px;">VALIDATED: SUBMITTED TO ACM DEBS '26 (LISBON)</div>
+            </div>
+            <div>
+                <div class="image-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,229,255,0.05) 0%, rgba(5,8,15,1) 100%); height: 100%; min-height: 320px; border: 1px solid #1e293b; border-radius: 8px; overflow: hidden;">
+                    <img src="rca_screenshot.png"
+                         alt="Fluxtion RCA tool: two processor versions compared with event trace, JSON diff, and LLM-authored root cause explanation"
+                         style="width: 100%; height: 100%; object-fit: contain; display: block;">
+                    <div style="position: absolute; top: 12px; right: 12px; background: rgba(11, 17, 32, 0.9); padding: 5px 10px; border-radius: 4px; border: 1px solid #00e5ff; font-family: 'Roboto Mono', monospace; font-size: 11px; color: #00e5ff; letter-spacing: 1px;">LIVE: RCA TOOL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: 2+ Years in Production -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">2+ Years in Production</h2>
+    <div class="content-area">
+        <div class="area-chart-container" style="padding: 15px 30px; height: 260px; display: flex; align-items: center; justify-content: center;">
+            <svg class="area-chart-svg" viewBox="0 0 1000 350" style="height: 100%;">
+                <defs>
+                    <linearGradient id="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00e5ff;" stop-opacity="0.4"></stop>
+                        <stop offset="100%" style="stop-color:#0b1120;" stop-opacity="0.0"></stop>
+                    </linearGradient>
+                </defs>
+                <g class="grid">
+                    <line x1="0" y1="50" x2="1000" y2="50" stroke-dasharray="4 4"></line>
+                    <line x1="0" y1="125" x2="1000" y2="125" stroke-dasharray="4 4"></line>
+                    <line x1="0" y1="200" x2="1000" y2="200" stroke-dasharray="4 4"></line>
+                    <line x1="0" y1="275" x2="1000" y2="275" stroke-dasharray="4 4"></line>
+                    <line x1="0" y1="350" x2="1000" y2="350"></line>
+                </g>
+                <path class="area-fill" d="M 0 350 L 0 250 L 200 220 L 400 180 L 600 110 L 800 60 L 1000 40 L 1000 350 Z"></path>
+                <polyline class="line-stroke" points="0,250 200,220 400,180 600,110 800,60 1000,40"></polyline>
+                <g class="data-points">
+                    <circle class="data-point" cx="0" cy="250" r="6"></circle>
+                    <circle class="data-point" cx="200" cy="220" r="6"></circle>
+                    <circle class="data-point" cx="400" cy="180" r="6"></circle>
+                    <circle class="data-point" cx="600" cy="110" r="6"></circle>
+                    <circle class="data-point" cx="800" cy="60" r="6"></circle>
+                    <circle class="data-point" cx="1000" cy="40" r="6"></circle>
+                </g>
+                <g class="axis-labels y-axis-labels">
+                    <text x="-15" y="55" text-anchor="end">99.99%</text>
+                    <text x="-15" y="130" text-anchor="end">99.90%</text>
+                    <text x="-15" y="205" text-anchor="end">99.50%</text>
+                    <text x="-15" y="280" text-anchor="end">99.00%</text>
+                </g>
+                <g class="axis-labels x-axis-labels">
+                    <text x="0" y="380" text-anchor="middle">Q1 '24</text>
+                    <text x="200" y="380" text-anchor="middle">Q3 '24</text>
+                    <text x="400" y="380" text-anchor="middle">Q1 '25</text>
+                    <text x="600" y="380" text-anchor="middle">Q3 '25</text>
+                    <text x="800" y="380" text-anchor="middle">Q1 '26</text>
+                    <text x="1000" y="380" text-anchor="middle">NOW</text>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="two-column" style="margin-top: 25px; gap: 30px;">
+            <div>
+                <p class="chart-summary" style="font-size: 16px;"><strong>Market-Proven:</strong> Successfully deployed in a live crypto market-making system for over two years with zero manual runtime intervention. Expanded to a second enterprise customer: <span style="color: #00e5ff;">Paid POC Carbon Capture</span>.</p>
+                <p class="chart-summary" style="margin-top: 10px; color: #ccff00; font-size: 18px;"><strong>Current Traction: ~$110K ARR</strong></p>
+                <div style="margin-top: 14px; padding: 10px 14px; border-left: 3px solid #1e293b; background: rgba(15, 23, 42, 0.3); border-radius: 4px;">
+                    <p style="margin: 0; font-size: 13px; color: #cbd5e1;"><strong style="color: #00e5ff;">In production:</strong> sub-microsecond decisions, zero GC pauses, zero manual intervention across 2+ years of live trading.</p>
+                </div>
+            </div>
+            <div class="bento-box" style="padding: 20px; display: flex; align-items: center; border-color: #00e5ff;">
+                <i class="fa-brands fa-java" style="font-size: 40px; color: #00e5ff; margin-right: 20px;"></i>
+                <p style="font-size: 15px; margin: 0;"><strong>Zero Runtime Dependency:</strong> Generated code is standard Java. No proprietary runtime dependency on Fluxtion is required post-compilation.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6.5: Market Validation -->
+<div class="slide-container" id="slide-validation">
+    <h2 class="slide-title">External Validation</h2>
+    <div class="content-area" style="display: flex; flex-direction: column; justify-content: space-between; gap: 18px; height: 100%;">
+        <div class="two-column" style="gap: 25px; flex: 2 1 auto; align-items: stretch;">
+            <div class="bento-box" style="padding: 22px 26px; border-color: #ccff00; display: flex; flex-direction: column; justify-content: center; background: transparent; background-image: none; box-shadow: none; backdrop-filter: none;">
+                <div class="tech-tag" style="margin-bottom: 10px; border-color: #ccff00; color: #ccff00; font-size: 11px;">ACQUISITION SIGNAL</div>
+                <h3 style="color: #f8fafc; margin-bottom: 14px; font-size: 16px;">Two Unsolicited Buyout Offers</h3>
+
+                <!-- HERO: the stronger of the two offers, front-loaded -->
+                <div style="margin-bottom: 14px;">
+                    <div style="font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: #ccff00; letter-spacing: 0.5px; line-height: 1.1; text-shadow: 0 0 20px rgba(204, 255, 0, 0.15);">
+                        LOW&nbsp;SEVEN-FIGURES
+                    </div>
+                    <div style="font-size: 13px; color: #cbd5e1; margin-top: 6px; line-height: 1.4;">
+                        <strong style="color: #00e5ff;">Carbon-capture POC client</strong> — offered outright acquisition of Telamin after a paid POC.
+                    </div>
+                </div>
+
+                <!-- SUPPORTING: the second (weaker) offer, demoted to a strip -->
+                <div style="border-top: 1px solid #1e293b; padding-top: 12px;">
+                    <div style="font-size: 12px; color: #94a3b8; line-height: 1.4;">
+                        Plus <strong style="color: #ccff00; font-size: 14px;">mid-six-figures</strong> from <strong style="color: #00e5ff;">crypto market-maker</strong> — after a competitive at-risk bake-off against other providers.
+                    </div>
+                </div>
+            </div>
+            <div class="bento-box" style="padding: 22px 26px; border-color: #00e5ff; display: flex; flex-direction: column; justify-content: center; background: transparent; background-image: none; box-shadow: none; backdrop-filter: none;">
+                <div class="tech-tag" style="margin-bottom: 15px; border-color: #00e5ff; color: #00e5ff; font-size: 11px;">PRODUCTIVITY BENCHMARK</div>
+                <h3 style="color: #f8fafc; margin-bottom: 12px; font-size: 18px;">5 Days vs 6 Man-Months</h3>
+                <p style="font-size: 14px; color: #cbd5e1; margin: 0;">
+                    Demonstrated to a defence-AI supplier whose lead sits on the <strong style="color: #f8fafc;">MOD AI Ethics Committee</strong>. Telamin reproduced in <strong style="color: #ccff00;">5 days</strong> what had taken their team <strong style="color: #ccff00;">6 man-months</strong>. Three days later: a <strong style="color: #00e5ff;">low-six-figure equity offer</strong> in the defence venture.
+                </p>
+            </div>
+        </div>
+        <div class="bento-box" style="padding: 20px 25px; border-color: #1e293b; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; background: transparent; background-image: none; box-shadow: none; backdrop-filter: none;">
+            <div class="tech-tag" style="margin-bottom: 12px; border-color: #00e5ff; color: #00e5ff; font-size: 11px;">DEFENCE ENGAGEMENT</div>
+            <div class="tiled-content" style="gap: 28px;">
+                <div style="text-align: left;">
+                    <h3 style="color: #ccff00; font-size: 14px; margin-bottom: 4px;">Air &amp; Space Warfare Centre</h3>
+                    <p style="font-size: 12px; color: #cbd5e1; margin: 0; line-height: 1.45;">Wrote to QinetiQ advising they prototype with the Telamin stack.</p>
+                </div>
+                <div style="text-align: left;">
+                    <h3 style="color: #ccff00; font-size: 14px; margin-bottom: 4px;">RAF Senior Tech Leadership</h3>
+                    <p style="font-size: 12px; color: #cbd5e1; margin: 0; line-height: 1.45;">"Years in front of where we are aiming." Invited to apply against specific challenge sets.</p>
+                </div>
+                <div style="text-align: left;">
+                    <h3 style="color: #ccff00; font-size: 14px; margin-bottom: 4px;">ADS / NATO / UK Defence Innovation</h3>
+                    <p style="font-size: 12px; color: #cbd5e1; margin: 0; line-height: 1.45;">Head of ADS brokered NATO AI-specialist meeting; European trade mission; UK Defence Innovation referral — "should be closely reviewed for revolutionising UK defence supply chain."</p>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 14px 20px; border-left: 3px solid #ccff00; background: transparent; border-radius: 4px; flex: 0 0 auto;">
+            <p style="margin: 0; font-size: 13px; color: #cbd5e1;"><strong style="color: #ccff00;">Counsel view:</strong> Kilburn &amp; Strode — one of the UK's top AI patent practices — prosecuting the extensions. Their assessment: <em>"interesting and very novel work."</em></p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Commercial Model -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title" style="margin-bottom: 15px;">Commercial Model</h2>
+    <div class="content-area" style="display: flex; flex-direction: column; justify-content: space-between; gap: 20px; height: 100%;">
+        <div class="two-column" style="gap: 20px; flex: 2 1 auto; align-items: stretch;">
+            <div class="bento-box bullet-list" style="padding: 24px 28px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin-bottom: 10px; font-size: 18px;">Commercial Architecture</h3>
+                <ul style="margin: 0;">
+                    <li style="margin-bottom: 12px; font-size: 13px; line-height: 1.45; padding-left: 0;">
+                        <strong style="font-size: 14px; margin-bottom: 2px;">Build-Time Licensing</strong>
+                        No runtime lock-in. No kill-switch. You pay to evolve, not to run.
+                    </li>
+                    <li style="margin-bottom: 12px; font-size: 13px; line-height: 1.45; padding-left: 0;">
+                        <strong style="font-size: 14px; margin-bottom: 2px;">Five-Tier SaaS Ladder</strong>
+                        From Free Explorer to Institutional ($2,500+/mo) for private cloud and sovereign deployments.
+                    </li>
+                    <li style="margin-bottom: 12px; font-size: 13px; line-height: 1.45; padding-left: 0;">
+                        <strong style="font-size: 14px; margin-bottom: 2px;">Token Economy</strong>
+                        Consumption-based micro-transactions for LLM-RCA, State-Shuttle, and cloud builds.
+                    </li>
+                    <li style="margin-bottom: 0px; font-size: 13px; line-height: 1.45; padding-left: 0;">
+                        <strong style="font-size: 14px; margin-bottom: 2px;">Third-Party Behaviour Scoring</strong>
+                        Creates a measurable, competitive market for validated agent behaviours — the compounding moat.
+                    </li>
+                </ul>
+            </div>
+            <div class="bento-box" style="padding: 22px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100%; border-color: #ccff00;">
+                <div style="font-size: 14px; color: #cbd5e1; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">Current Traction</div>
+                <div class="number" style="color: #ccff00; font-size: 48px; font-weight: 700; line-height: 1; text-shadow: 0 0 30px rgba(204, 255, 0, 0.2); margin-bottom: 8px;">~$110K<span style="font-size: 20px;"> ARR</span></div>
+                <div style="font-size: 14px; color: #00e5ff;">Deployed in 2 Live Environments</div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 6px; line-height: 1.4;">Crypto Market-Making ($80K/yr)<br>Carbon Capture PoC ($30K)</div>
+            </div>
+        </div>
+        
+        <div class="tiled-content" style="gap: 15px; flex: 1 1 auto; align-items: stretch;">
+            <div class="image-tile bento-box" style="padding: 18px 16px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <i class="fa-solid fa-server" style="font-size: 28px; color: #00e5ff; margin-bottom: 12px;"></i>
+                <h3 style="font-size: 15px; margin-bottom: 8px;">Strategic Focus</h3>
+                <p style="font-size: 12px; margin: 0; line-height: 1.3;">HFT, Defence, and high-stakes Enterprise.</p>
+            </div>
+            <div class="image-tile bento-box" style="padding: 18px 16px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <i class="fa-solid fa-cubes-stacked" style="font-size: 28px; color: #ccff00; margin-bottom: 12px;"></i>
+                <h3 style="font-size: 15px; margin-bottom: 8px;">Platform Structure</h3>
+                <p style="font-size: 12px; margin: 0; line-height: 1.3;">B2B SaaS capturing recurring value across build, governance, and execution.</p>
+            </div>
+            <div class="image-tile bento-box" style="padding: 18px 16px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <i class="fa-solid fa-file-contract" style="font-size: 28px; color: #00e5ff; margin-bottom: 12px;"></i>
+                <h3 style="font-size: 15px; margin-bottom: 8px;">Pricing Power</h3>
+                <p style="font-size: 12px; margin: 0; line-height: 1.3;">Non-negotiable infrastructure for regulated AI deployment.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Market Opportunity -->
+<div class="slide-container" id="slide-market" style="padding: 30px 60px 20px 60px;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; border-bottom: 1px solid #00e5ff; padding-bottom: 5px; margin-bottom: 10px;">
+        <h2 style="font-size: 26px; color: #ffffff; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-family: 'Montserrat', sans-serif;">Market Opportunity</h2>
+        <p style="color: #00e5ff; font-size: 13px; margin: 0; font-weight: 600; font-family: 'Inter', sans-serif; text-transform: none; letter-spacing: normal;">A New Category at the Intersection of Four Growing Markets</p>
+    </div>
+    
+    <div class="content-area" style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%; gap: 14px;">
+        
+        <div class="bento-box" style="padding: 18px 22px; width: 100%; flex: 0 0 auto;">
+            <table class="market-table" style="width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.4;">
+                <thead>
+                    <tr>
+                        <th style="width: 26%; padding: 6px 0 10px 0;">Market Segment</th>
+                        <th style="width: 14%; padding: 6px 0 10px 0;">2026 TAM</th>
+                        <th style="width: 16%; padding: 6px 0 10px 0;">2030 TAM</th>
+                        <th style="width: 44%; padding: 6px 0 10px 0;">Strategic Driver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;"><strong>Complex Event Processing</strong></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$8.0B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$19B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            24% CAGR. Real-time decisioning in HFT, FinTech, IoT.
+                            <span class="source-citation" style="margin-top: 2px;">Mordor Intelligence</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;"><strong>AI Agent Orchestration</strong><br><span style="color:#64748b; font-size: 9px;">(full market)</span></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$8.5B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$45B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            40% of enterprise apps embed agents by 2026. 
+                            <span class="source-citation" style="margin-top: 2px;">Deloitte TMT 2026; Gartner</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            <span style="color: #64748b; margin-right: 5px;">→</span> <strong>Governance subset</strong>
+                            <br><span style="color: #64748b; font-size: 9px; font-style: italic;">(subset of AI Agent Orchestration, not additive)</span>
+                        </td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$3–4B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$15–20B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            60% of AI failures stem from governance gaps. Governance is the dominant wedge.
+                            <span class="source-citation" style="margin-top: 2px;">IDC; Telamin estimate</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;"><strong>Regulated Compliance</strong><br><span style="color:#64748b; font-size: 9px;">(real-time, runtime)</span></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$2.0B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$6.0B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            Deterministic audit mandates: MiFID II, EU AI Act, DO-178C.
+                            <br><span style="display: inline-block; margin-top: 2px; padding: 2px 4px; border: 1px solid #ccff00; color: #ccff00; font-family: 'Roboto Mono', monospace; font-size: 9px; letter-spacing: 1px;">ACTIVE ENGAGEMENT: MOD · QINETIQ · RAF · NATO</span>
+                            <span class="source-citation" style="margin-top: 2px;">Industry estimates</span>
+                        </td>
+                    </tr>
+                    <tr class="new-category-row">
+                        <td style="padding: 8px 0 8px 8px; border-bottom: 1px solid #1e293b;">
+                            Regulated Agentic Behaviour
+                            <div class="new-category-badge" style="margin-top: 2px; margin-left: 0; font-size: 8px;">NEW CATEGORY</div>
+                        </td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #ccff00; font-size: 13px;"><strong>~$1–2B</strong> <br><span style="font-size:9px; font-weight:normal; color:#cbd5e1;">Telamin est.</span></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #ccff00; font-size: 13px;"><strong>~$8–15B</strong> <br><span style="font-size:9px; font-weight:normal; color:#cbd5e1;">Telamin est.</span></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            The layer Telamin is creating. Governance of agentic AI in regulated environments. No incumbent.
+                            <span class="source-citation" style="margin-top: 2px;">Telamin category estimate</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;"><strong>Platform expansion</strong><br><span style="color:#64748b; font-size: 9px;">(marketplace/cloud)</span></td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">—</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">~$9.0B</td>
+                        <td style="padding: 8px 0; border-bottom: 1px solid #1e293b; color: #cbd5e1;">
+                            Multi-target compilation, managed cloud network effects.
+                            <span class="source-citation" style="margin-top: 2px;">Telamin platform roadmap</span>
+                        </td>
+                    </tr>
+                    <tr class="total-row">
+                        <td style="padding: 10px 0 4px 0;">Total addressable <span style="font-weight:normal; font-size: 11px; color:#64748b; display: block; line-height: 1.3; margin-top: 2px;">(2030, platform view)</span></td>
+                        <td style="color: #00e5ff; padding: 10px 0 4px 0;"></td>
+                        <td style="color: #00e5ff; padding: 10px 0 4px 0; font-size: 15px;">~$50B+</td>
+                        <td style="padding: 10px 0 4px 0;"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 10px; padding: 8px 12px; border-left: 3px solid #ccff00; background: rgba(204, 255, 0, 0.05); border-radius: 4px;">
+                <p style="margin: 0; font-size: 11px; color: #cbd5e1;"><strong style="color: #ccff00;">Direct comparable:</strong> Acin (AI operational risk for financial services) acquired May 2025 by Cube (Hg portfolio). Founder Paul Ford now a Telamin advisor. A 2025 category exit — not a decade-old proxy.</p>
+            </div>
+        </div>
+
+        <!-- PERFECT 3 COLUMN SINGLE ROW LAYOUT -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 24px; width: 100%; align-items: stretch; flex: 0 0 auto;">
+            
+            <!-- Col 1: TAM summary text -->
+            <div style="display: flex; flex-direction: column; justify-content: center;">
+                <div style="color: #00e5ff; font-weight: 700; font-size: 13px; font-family: 'Montserrat', sans-serif;">TAM: ~$12B (2026) &rarr; ~$50B+ (2030)</div>
+                <div style="color: #cbd5e1; font-size: 10px; margin-top: 4px; line-height: 1.4;">Four converging markets; governance wedge is the dominant driver.</div>
+            </div>
+            
+            <!-- Col 2: SAM & SOM Labels -->
+            <div style="display: flex; flex-direction: column; justify-content: center; border-left: 1px solid #1e293b; padding-left: 15px;">
+                <div style="color: #00e5ff; font-weight: 700; font-size: 11px; font-family: 'Montserrat', sans-serif;">SAM: ~$1.5B</div>
+                <div style="color: #cbd5e1; font-size: 9px; margin-bottom: 4px;">Latency-sensitive determinism.</div>
+                
+                <div style="color: #ccff00; font-weight: 700; font-size: 11px; font-family: 'Montserrat', sans-serif;">SOM: $5M–$15M ARR</div>
+                <div style="color: #94a3b8; font-size: 8px; font-family: 'Roboto Mono', monospace; line-height: 1.3;">
+                    • Inst: 5-15 accs × $30-100K | Growth: 30 teams<br>
+                    • Pro/Analyst: 700 seats | Cloud Tokens: $200-500K
+                </div>
+            </div>
+
+            <!-- Col 3: Inflection Kicker -->
+            <div style="display: flex; align-items: center; background: rgba(0, 229, 255, 0.05); border-left: 3px solid #00e5ff; padding: 10px; border-radius: 4px;">
+                <div style="font-size: 9px; color: #cbd5e1; line-height: 1.4;">
+                    <strong style="color: #00e5ff;">2026 INFLECTION:</strong> 60% of AI failures already trace to governance, not models. Enterprises are moving from testing to production — the category-definition window is open now.
+                </div>
+            </div>
+            
+        </div>
+        
+        <p style="font-size: 8px; color: #64748b; text-align: center; margin-top: 5px; width: 100%;">
+            * "Regulated Agentic Behaviour" is a net-new category. No incumbent vendor sizes it yet. Telamin is positioned to define both the category and the measurement.
+        </p>
+    </div>
+</div>
+
+<!-- Slide 9: Timeline -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">System of Record for AI Behaviour</h2>
+    <div class="content-area">
+        <p style="text-align: center; max-width: 900px; margin: 0 auto 45px; font-size: 20px;">Telamin is uniquely positioned to become the definitive operating system that strictly determines what AI behaviour is valid, what actually works, and what is allowed to run.</p>
+        <div class="timeline-layout">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-item">
+                <div class="content-wrapper" style="padding: 14px 20px;">
+                    <h3 style="color: #00e5ff;">Phase 1: Present</h3>
+                    <div class="tech-tag" style="margin-bottom: 10px; padding: 3px 10px; border-color: #1e293b; color: #94a3b8; font-size: 10px;">Months 0–9 post-close</div>
+                    <p><strong>Explorer + DSL Analyst</strong><br>Establish core foundation and secure early adopters.</p>
+                    <p style="margin-top: 10px; color: #ccff00; font-family: 'Roboto Mono', monospace; font-size: 12px;">TARGET: 3-5 CUST, $300K+ ARR</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="content-wrapper" style="padding: 14px 20px;">
+                    <h3 style="color: #ccff00;">Phase 2: Horizon 1</h3>
+                    <div class="tech-tag" style="margin-bottom: 10px; padding: 3px 10px; border-color: #1e293b; color: #94a3b8; font-size: 10px;">Months 9–18</div>
+                    <p><strong>Solo Pro + Growth</strong><br>MOD / RAF paid POC conversion; scalable automated governance tooling.</p>
+                    <p style="margin-top: 10px; color: #00e5ff; font-family: 'Roboto Mono', monospace; font-size: 12px;">TARGET: $500K+ ARR</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="content-wrapper" style="padding: 14px 20px;">
+                    <h3 style="color: #00e5ff;">Phase 3: Horizon 2</h3>
+                    <div class="tech-tag" style="margin-bottom: 10px; padding: 3px 10px; border-color: #1e293b; color: #94a3b8; font-size: 10px;">Months 18–24 — Series A ready</div>
+                    <p><strong>Institutional Rollout</strong><br>Private cloud & mission-critical sovereign deployments.</p>
+                    <p style="margin-top: 10px; color: #ccff00; font-family: 'Roboto Mono', monospace; font-size: 12px;">TARGET: $1M+ ARR</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="content-wrapper" style="padding: 14px 20px;">
+                    <h3 style="color: #ccff00;">Phase 4: Ecosystem</h3>
+                    <div class="tech-tag" style="margin-bottom: 10px; padding: 3px 10px; border-color: #1e293b; color: #94a3b8; font-size: 10px;">Post Series A</div>
+                    <p><strong>Marketplace Standard</strong><br>Third-party behaviour marketplace. Managed execution. Multi-target compilation network.</p>
+                    <p style="margin-top: 10px; color: #00e5ff; font-family: 'Roboto Mono', monospace; font-size: 12px;">TARGET: $5M+ ARR · CATEGORY OWNERSHIP</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Deep IP & Advisors -->
+<div class="slide-container" id="slide10" style="padding: 40px 50px;">
+    <h2 class="slide-title" style="margin-bottom: 10px;">Deep IP, Expertise & Advisors</h2>
+    <div class="content-area" style="display: flex; flex-direction: column; justify-content: space-between; gap: 18px; height: 100%;">
+        
+        <!-- Row 1: Founder and IP Moat -->
+        <div class="two-column tiled" style="flex: 1 1 auto; align-items: stretch; gap: 15px;">
+            <div class="bento-box" style="padding: 22px 24px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="icon" style="color: #ccff00; font-size: 24px; margin-bottom: 10px;"><i class="fa-solid fa-user-astronaut"></i></div>
+                <h3 style="color: #f8fafc; font-size: 15px; margin-bottom: 8px;">Founder: Greg Higgins</h3>
+                <p style="font-size: 12px; margin-bottom: 0; line-height: 1.45;">Co-founded and ran Edge Capital Investments (HFT). Repeat founder with architect-level JVM expertise. Built and maintained the core Fluxtion system in live, high-frequency production environments to harden it against extreme market volatility.</p>
+            </div>
+            <div class="bento-box" style="padding: 22px 24px; display: flex; flex-direction: column; justify-content: center;">
+                <div class="icon" style="color: #00e5ff; font-size: 24px; margin-bottom: 10px;"><i class="fa-solid fa-fingerprint"></i></div>
+                <h3 style="color: #f8fafc; font-size: 15px; margin-bottom: 8px;">Compiler IP Moat</h3>
+                <p style="margin-bottom: 6px; font-size: 12px; line-height: 1.45;"><strong>Granted US patent: US11074079B2.</strong> Three pending applications covering the AI-deterministic interface. No competing filings identified. This creates a massive defensibility moat.</p>
+                <p style="font-size: 10px; color: #94a3b8; border-top: 1px solid #1e293b; padding-top: 6px; margin: 0;"><i class="fa-solid fa-gavel" style="color: #ccff00; margin-right: 4px;"></i>Prosecuted by <strong style="color: #cbd5e1;">Kilburn &amp; Strode</strong> — top UK AI patent practice: <em>"interesting and very novel work."</em></p>
+            </div>
+        </div>
+
+        <!-- Row 2: Advisors -->
+        <div class="bento-box" style="width: 100%; border-color: #00e5ff; padding: 22px 26px; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px;">
+                <h3 style="color: #f8fafc; margin: 0; font-size: 14px;">Advisors</h3>
+                <div class="tech-tag" style="margin: 0; border-color: #00e5ff; color: #00e5ff; font-size: 8px; padding: 2px 4px;">18 MONTHS ENGAGED</div>
+            </div>
+            <div class="two-column" style="gap: 15px;">
+                <div style="padding: 14px 16px; border-left: 3px solid #ccff00; background: rgba(204, 255, 0, 0.04); border-radius: 4px;">
+                    <h3 style="color: #ccff00; font-size: 12px; margin-bottom: 2px;">Paul Ford</h3>
+                    <p style="font-size: 10px; color: #94a3b8; font-family: 'Roboto Mono', monospace; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.5px;">Founder / CEO, Aurrerra</p>
+                    <p style="font-size: 10px; color: #cbd5e1; line-height: 1.45; margin: 0;">Previously founder &amp; CEO of <strong style="color: #f8fafc;">Acin</strong> — AI operational risk for financial services. Acquired May 2025 by <strong style="color: #f8fafc;">Cube</strong> (Hg portfolio). A direct category comparable for Telamin. <strong style="color: #ccff00;">Advises on:</strong> regulated-enterprise GTM, category-creation playbook.</p>
+                </div>
+                <div style="padding: 14px 16px; border-left: 3px solid #00e5ff; background: rgba(0, 229, 255, 0.04); border-radius: 4px;">
+                    <h3 style="color: #00e5ff; font-size: 12px; margin-bottom: 2px;">Tessa Pugh</h3>
+                    <p style="font-size: 10px; color: #94a3b8; font-family: 'Roboto Mono', monospace; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.5px;">Co-Founder / Former CEO, PharmaReview</p>
+                    <p style="font-size: 10px; color: #cbd5e1; line-height: 1.45; margin: 0;">Co-founded and scaled <strong style="color: #f8fafc;">PharmaReview</strong> to global leader in pharma copy review with <strong style="color: #f8fafc;">8 of the top 20 pharma companies</strong> as clients. Exited to <strong style="color: #f8fafc;">IQVIA</strong>. Regulated B2B GTM depth. <strong style="color: #00e5ff;">Advises on:</strong> enterprise sales motion, compliance-driven procurement.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Team Plan -->
+        <div class="bento-box" style="width: 100%; border-color: #1e293b; background-color: rgba(15, 23, 42, 0.5); padding: 16px 22px; flex: 0 1 auto;">
+            <h3 style="color: #f8fafc; margin-bottom: 6px; text-align: center; font-size: 14px;">Team Plan Post-Close</h3>
+            <div class="tiled-content" style="gap: 15px;">
+                <div style="text-align: center; flex: 1;">
+                    <div style="color: #00e5ff; font-size: 28px; font-weight: 700; line-height: 1;">2–3</div>
+                    <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px; margin-bottom: 0;">Senior compiler &amp; platform engineers — incl. 1 principal/staff level (compiler co-owner)</p>
+                </div>
+                <div style="text-align: center; flex: 1;">
+                    <div style="color: #ccff00; font-size: 28px; font-weight: 700; line-height: 1;">1</div>
+                    <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px; margin-bottom: 0;">DevRel / developer-led growth lead</p>
+                </div>
+                <div style="text-align: center; flex: 1;">
+                    <div style="color: #00e5ff; font-size: 28px; font-weight: 700; line-height: 1;">1</div>
+                    <p style="font-size: 11px; color: #cbd5e1; margin-top: 4px; margin-bottom: 0;">Enterprise sales (HFT &amp; sovereign accounts)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: The Ask -->
+<div class="slide-container" id="slide-ask">
+    <h2 class="slide-title">The Ask</h2>
+    <div class="content-area" style="display: flex; flex-direction: column; gap: 18px; height: 100%;">
+
+        <!-- Row 1: 2-column Ask grid -->
+        <div class="ask-grid" style="gap: 30px; flex: 1 1 auto; align-items: stretch;">
+
+            <!-- Left: Raising $2M -->
+            <div class="bento-box" style="padding: 28px 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-color: #00e5ff;">
+                <h3 style="color: #94a3b8; font-size: 20px; margin-bottom: 12px;">Raising</h3>
+                <div style="font-size: 78px; font-weight: 700; color: #00e5ff; line-height: 1; margin-bottom: 0;">$2M</div>
+            </div>
+
+            <!-- Right: Use of Funds + Series A Target -->
+            <div class="bento-box bullet-list" style="padding: 24px 28px; display: flex; flex-direction: column; justify-content: center;">
+                <h3 style="margin-bottom: 14px;">Use of Funds &amp; Trajectory</h3>
+                <ul style="margin: 0;">
+                    <li style="margin-bottom: 10px; font-size: 17px; line-height: 1.4;">
+                        <i class="fa-solid fa-users" style="font-size: 18px;"></i>
+                        <strong>Engineering &rarr; Enterprise-Grade Control Plane</strong>
+                        Hire 2–3 senior compiler engineers to deliver the production-grade Control Plane Horizon 1 customers require.
+                    </li>
+                    <li style="margin-bottom: 10px; font-size: 17px; line-height: 1.4;">
+                        <i class="fa-solid fa-scale-balanced" style="font-size: 18px;"></i>
+                        <strong>IP Prosecution &rarr; Execution &amp; AI-Interface Moat</strong>
+                        Secure the three pending patents covering the deterministic-graph / LLM-bridge interface — the compiler-layer moat.
+                    </li>
+                    <li style="margin-bottom: 0; font-size: 17px; line-height: 1.4;">
+                        <i class="fa-solid fa-rocket" style="font-size: 18px;"></i>
+                        <strong>GTM &rarr; $300K–$500K ARR</strong>
+                        Convert active defence + HFT pipeline (MOD / QinetiQ / RAF / NATO + two production HFT firms) into contracted revenue.
+                    </li>
+                </ul>
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #1e293b;">
+                    <p style="color: #ccff00; font-weight: 600; font-size: 15px; margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-solid fa-bullseye" style="font-size: 15px; line-height: 1;"></i>
+                        <span>Series A Target (24+ Mos Runway): <span style="color: #cbd5e1; font-weight: 400;">$2M+ ARR with multiple institutional deployments.</span></span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Row 2: Full-width valuation anchor footer -->
+        <div style="flex: 0 0 auto; border-left: 3px solid #00e5ff; background: rgba(0,229,255,0.04); padding: 10px 16px; border-radius: 4px;">
+            <p style="color: #cbd5e1; margin: 0; font-size: 12px; line-height: 1.5; font-style: italic;">
+                <strong style="color: #00e5ff; font-style: normal;">Valuation evidence:</strong>
+                Low-seven-figure acquisition offer (carbon-capture POC client) &nbsp;·&nbsp;
+                Mid-six-figure offer (crypto market-maker, post-bake-off) &nbsp;·&nbsp;
+                Granted US patent (US11074079B2) + 3 pending &nbsp;·&nbsp;
+                Active MOD / QinetiQ / RAF / NATO pipeline &nbsp;·&nbsp;
+                2025 category comparable: Acin &rarr; Cube (Hg portfolio).
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<!-- Slide 12: Closing -->
+<div class="slide-container" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, rgba(11,17,32,1) 0%, rgba(5,8,15,1) 100%);" id="slide-closing">
+    <div class="content-area" style="align-items: center; justify-content: center;">
+        <div class="tech-tag" style="margin-bottom: 40px; border-color: #1e293b; color: #94a3b8; font-size: 16px;">SYSTEM_HALT: END_OF_TRANSMISSION</div>
+        <h1 style="font-size: 48px; line-height: 1.5; max-width: 1000px; text-transform: none; font-weight: 600;">
+            Telamin does not learn.<br>
+            <span style="color: #00e5ff; font-weight: 800;">Telamin is the kernel that decides what AI is allowed to learn.</span>
+        </h1>
+        <div style="margin-top: 60px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div class="tech-tag" style="border-color: #00e5ff; color: #00e5ff; font-size: 14px;">CONTACT</div>
+            <p style="color: #f8fafc; font-size: 22px; font-weight: 600; margin: 0;">Greg Higgins</p>
+            <p style="color: #cbd5e1; font-size: 16px; margin: 0;">Founder &amp; Chief Architect</p>
+            <a href="mailto:greg.higgins@telamin.com" style="color: #00e5ff; font-family: 'Roboto Mono', monospace; font-size: 16px; text-decoration: none; margin-top: 4px;">greg.higgins@telamin.com</a>
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX A0 -->
+<div class="slide-container" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, rgba(11,17,32,1) 0%, rgba(5,8,15,1) 100%);" id="slide-appendix-title">
+    <div class="content-area" style="align-items: center; justify-content: center;">
+        <div class="tech-tag" style="margin-bottom: 30px; border-color: #1e293b; color: #94a3b8; font-size: 14px;">TECHNICAL DETAIL &middot; VALIDATION &middot; DEFENSIBILITY</div>
+        <h1 style="font-size: 56px; font-weight: 600; text-transform: none; margin-bottom: 10px;">Appendix</h1>
+        <h2 style="color: #00e5ff; font-size: 24px; font-family: 'Inter', sans-serif; text-transform: none; font-weight: 400; margin-bottom: 30px; border: none;">Technical detail &amp; external validation</h2>
+        <p style="color: #cbd5e1; font-size: 17px; max-width: 800px; margin-bottom: 50px;">Supporting material for technical and commercial diligence. The main deck carries the thesis; the following five slides defend it.</p>
+        <div style="font-family: 'Roboto Mono', monospace; color: #64748b; font-size: 13px; border-top: 1px solid #1e293b; padding-top: 20px; width: 100%; max-width: 1000px;">
+            A1 EXECUTION_INFERENCE &middot; A2 ELEMENTUM_HEAD_TO_HEAD &middot; A3 CONTROL_PLANE_+_RUNTIME &middot; A4 ADAPTIVE_DETERMINISM
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX A1 -->
+<div class="slide-container" id="slide-appendix-primitive">
+    <h2 class="slide-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span>EXECUTION INFERENCE — THE NOVEL PRIMITIVE</span>
+        <span class="tech-tag" style="margin: 0; border-color: #1e293b; color: #64748b; font-size: 10px; padding: 3px 8px;">APPENDIX &middot; A1</span>
+    </h2>
+    <div class="content-area" style="gap: 14px; justify-content: flex-start;">
+        <div class="bento-box" style="padding: 18px 30px;">
+            <h3 style="color: #00e5ff; margin-bottom: 10px;">The application structure IS the execution model</h3>
+            <p style="font-size: 14px;">Traditional event-driven systems — reactive frameworks, stream processors, workflow engines — require developers to define execution pipelines, scheduling, and coordination explicitly, through a DSL, a reactive topology, or a workflow specification. Telamin derives all of it from the application's object graph at compile time. No runtime routing. No orchestration layer. No coordination DSL.</p>
+        </div>
+        <div class="bento-box" style="padding: 16px 30px; border-left: 4px solid #ccff00; background: rgba(204, 255, 0, 0.05);">
+            <div class="tech-tag" style="border-color: #ccff00; color: #ccff00; font-size: 10px; margin-bottom: 10px; padding: 2px 6px;">THE TRADE-OFF</div>
+            <p style="font-size: 14px; margin: 0;">Execution inference requires a <strong>closed-world assumption</strong> — the dependency graph must be fully known at compile time. That bounded scope is what unlocks four properties that matter to the target market: deterministic execution, zero allocation in the steady state, microsecond-predictable latency, and a reproducible audit trace of every decision.</p>
+        </div>
+        <div class="two-column" style="gap: 30px; align-items: stretch;">
+            <div class="bento-box bullet-list" style="padding: 20px 30px; border-left: 3px solid #00e5ff; background: rgba(0, 229, 255, 0.05);">
+                <h3 style="font-size: 16px; margin-bottom: 12px; color: #f8fafc;">Where this applies</h3>
+                <p style="font-size: 13px; margin-bottom: 12px;">Safety-critical, real-time, audit-bound systems that operate under closed-world constraints by necessity:</p>
+                <ul style="font-size: 13px;">
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-check" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>HFT and regulated financial execution</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-check" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Defence, autonomy, robotics</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-check" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Edge and embedded systems</li>
+                    <li style="font-size: 13px; margin-bottom: 0; padding-left: 20px;"><i class="fa-solid fa-check" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Regulated enterprise AI deployment</li>
+                </ul>
+            </div>
+            <div class="bento-box bullet-list" style="padding: 20px 30px; border-left: 3px solid #64748b; background: rgba(100, 116, 139, 0.05);">
+                <h3 style="font-size: 16px; margin-bottom: 12px; color: #f8fafc;">Where this does not apply</h3>
+                <p style="font-size: 13px; margin-bottom: 12px;">Open-world, dynamically-evolving systems:</p>
+                <ul style="font-size: 13px;">
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-xmark" style="font-size: 12px; top: 2px; color: #64748b;"></i>Interactive web services with unconstrained external state</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-xmark" style="font-size: 12px; top: 2px; color: #64748b;"></i>Open-ended web-scraping agents</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-xmark" style="font-size: 12px; top: 2px; color: #64748b;"></i>General-purpose workflow engines</li>
+                    <li style="font-size: 13px; margin-bottom: 0; padding-left: 20px;"><i class="fa-solid fa-xmark" style="font-size: 12px; top: 2px; color: #64748b;"></i>Experimentation / research notebooks</li>
+                </ul>
+            </div>
+        </div>
+        <p style="text-align: center; font-size: 12px; font-style: italic; color: #94a3b8; margin-top: 5px;">The class of systems where the trade is right — HFT, defence, autonomy, regulated enterprise — is the target.</p>
+    </div>
+</div>
+
+<!-- APPENDIX A2 -->
+<div class="slide-container" id="slide-appendix-elementum">
+    <h2 class="slide-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span>CATEGORY VALIDATION — ELEMENTUM HEAD-TO-HEAD</span>
+        <span class="tech-tag" style="margin: 0; border-color: #1e293b; color: #64748b; font-size: 10px; padding: 3px 8px;">APPENDIX &middot; A2</span>
+    </h2>
+    <style>#slide-appendix-elementum .comparison-table td, #slide-appendix-elementum .comparison-table th { padding: 10px 15px; }</style>
+    <div class="content-area" style="gap: 10px; justify-content: flex-start;">
+        <div class="bento-box" style="padding: 14px 30px; display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; padding-right: 30px;">
+                <h3 style="color: #00e5ff; margin-bottom: 6px;">The problem is already being funded at scale</h3>
+                <p style="font-size: 13px; margin: 0;">Elementum AI has raised ~$75M at a reported ~$220M valuation to address the non-determinism of LLM-based agents — with an orchestration layer that routes work around probabilistic execution. Telamin solves the same problem one level deeper: we compile the behaviour itself into a mathematically verifiable deterministic graph.</p>
+            </div>
+            <div class="tech-tag" style="border-color: #1e293b; color: #64748b; font-size: 10px; padding: 2px 6px; white-space: nowrap;">SOURCE: elementum.ai &middot; cbinsights</div>
+        </div>
+
+        <div class="bento-box" style="padding: 10px 25px;">
+            <table class="comparison-table" style="margin-top: 0;">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Dimension</th>
+                        <th style="width: 40%;">Elementum <span style="text-transform: none; font-size: 11px; color: #64748b; font-weight: 500;">(orchestration layer)</span></th>
+                        <th style="width: 40%; color: #ccff00;">Telamin <span style="text-transform: none; font-size: 11px; color: #64748b; font-weight: 500;">(compiled execution)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Architectural layer</strong></td>
+                        <td>Rule-based orchestration over probabilistic agents</td>
+                        <td class="highlight-row">Ahead-of-time compilation into a deterministic kernel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Token cost at runtime</strong></td>
+                        <td>Ongoing — scales with transaction volume</td>
+                        <td class="highlight-row">Zero — tokens consumed only on compile / iterate cycles</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Determinism source</strong></td>
+                        <td>Routing rules that bypass the LLM where possible</td>
+                        <td class="highlight-row">Verifiable IR with proven execution semantics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audit surface</strong></td>
+                        <td>Orchestration logs + agent traces</td>
+                        <td class="highlight-row">Reproducible execution trace of the compiled graph</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data privacy at runtime</strong></td>
+                        <td>CloudLink into Snowflake / Databricks in client env</td>
+                        <td class="highlight-row">Compiled code runs in client env with zero runtime dependency</td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: none;"><strong>Re-design cost</strong></td>
+                        <td style="border-bottom: none;">Re-prompt / re-orchestrate (tokens + retraining cycles)</td>
+                        <td class="highlight-row" style="border-bottom: none;">Re-compile via toolset (bounded, auditable, priced at compile step)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="padding: 8px 20px; border-left: 3px solid #ccff00; background: rgba(204, 255, 0, 0.05); border-radius: 4px; margin-top: auto;">
+            <p style="margin: 0; font-size: 13px; color: #cbd5e1; font-style: italic;">Elementum's raise validates buyer demand. Telamin wins on unit economics (no runtime token burn), depth of guarantee (compile-time, not orchestration-time), and audit surface (reproducible trace, not LLM log archaeology).</p>
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX A3 -->
+<div class="slide-container" id="slide-appendix-architecture">
+    <h2 class="slide-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span>ONE ENGINE · TWO BUYERS</span>
+        <span class="tech-tag" style="margin: 0; border-color: #1e293b; color: #64748b; font-size: 10px; padding: 3px 8px;">APPENDIX &middot; A3</span>
+    </h2>
+    <div class="content-area" style="gap: 20px; justify-content: flex-start;">
+        <p style="font-size: 18px; text-align: center; margin-bottom: 5px;">Telamin is a single architecture with two entry points into the same compiler and execution kernel.</p>
+        
+        <div class="two-column" style="gap: 30px; align-items: stretch; margin-bottom: 10px;">
+            <div class="bento-box bullet-list" style="padding: 25px; border-left: 4px solid #00e5ff;">
+                <div class="tech-tag" style="border-color: #00e5ff; color: #00e5ff; font-size: 10px; margin-bottom: 12px; padding: 2px 6px;">GOVERNANCE SURFACE</div>
+                <h3 style="color: #00e5ff; margin-bottom: 4px; font-size: 22px;">Control Plane</h3>
+                <p style="font-style: italic; font-size: 14px; margin-bottom: 16px; color: #94a3b8;">Validation &amp; governance</p>
+                <ul style="font-size: 13px; margin-bottom: 20px;">
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Compiles system logic into verifiable behaviour</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Enforces policy constraints before execution</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Produces reproducible audit traces for regulator and IC</li>
+                    <li style="font-size: 13px; margin-bottom: 0; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #00e5ff;"></i>Enables regression testing, replay, deterministic RCA</li>
+                </ul>
+                <div style="border-top: 1px solid #1e293b; padding-top: 15px;">
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 4px;"><span style="color: #94a3b8;">BUYER:</span> <span style="color: #f8fafc;">Regulated enterprise</span></p>
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 4px;"><span style="color: #94a3b8;">BUDGET:</span> <span style="color: #f8fafc;">Compliance, AI governance, risk</span></p>
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 0;"><span style="color: #94a3b8;">CUSTOMERS:</span> <span style="color: #f8fafc;">Banks, regulated finance, defence primes</span></p>
+                </div>
+            </div>
+            
+            <div class="bento-box bullet-list" style="padding: 25px; border-left: 4px solid #ccff00;">
+                <div class="tech-tag" style="border-color: #ccff00; color: #ccff00; font-size: 10px; margin-bottom: 12px; padding: 2px 6px;">EXECUTION SURFACE</div>
+                <h3 style="color: #ccff00; margin-bottom: 4px; font-size: 22px;">Runtime</h3>
+                <p style="font-style: italic; font-size: 14px; margin-bottom: 16px; color: #94a3b8;">Deterministic autonomous execution</p>
+                <ul style="font-size: 13px; margin-bottom: 20px;">
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #ccff00;"></i>Executes compiled behaviour at microsecond latency</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #ccff00;"></i>Embeds ML / LNN models as first-class nodes inside the deterministic graph</li>
+                    <li style="font-size: 13px; margin-bottom: 8px; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #ccff00;"></i>Supports safety constraints and human-in-the-loop override</li>
+                    <li style="font-size: 13px; margin-bottom: 0; padding-left: 20px;"><i class="fa-solid fa-angle-right" style="font-size: 12px; top: 2px; color: #ccff00;"></i>Runs on constrained edge hardware</li>
+                </ul>
+                <div style="border-top: 1px solid #1e293b; padding-top: 15px;">
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 4px;"><span style="color: #94a3b8;">BUYER:</span> <span style="color: #f8fafc;">Autonomous-systems programmes</span></p>
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 4px;"><span style="color: #94a3b8;">BUDGET:</span> <span style="color: #f8fafc;">Autonomy, real-time, mission-critical software</span></p>
+                    <p style="font-family: 'Roboto Mono', monospace; font-size: 11px; margin-bottom: 0;"><span style="color: #94a3b8;">CUSTOMERS:</span> <span style="color: #f8fafc;">Defence, robotics, edge AI</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="font-size: 22px; color: #00e5ff; text-align: center; margin: 5px 0 10px 0; font-weight: 500;">One governs what is allowed to run. The other runs it.</div>
+        
+        <div class="bento-box" style="padding: 15px 25px; border-left: 3px solid #00e5ff; background: rgba(0, 229, 255, 0.05); margin-top: auto;">
+            <p style="font-size: 12px; font-style: italic; color: #cbd5e1; margin: 0;">Same land-and-expand physics Palantir used to grow from compliance-adjacent analytics into the dominant defence platform, and Databricks used to grow from a governed data tool into the full AI/ML platform contract. Control Plane is the enterprise wedge; Runtime is the expansion surface.</p>
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX A4 -->
+<div class="slide-container" id="slide-appendix-adaptive">
+    <h2 class="slide-title" style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span>DETERMINISM DOES NOT MEAN FIXED</span>
+        <span class="tech-tag" style="margin: 0; border-color: #1e293b; color: #64748b; font-size: 10px; padding: 3px 8px;">APPENDIX &middot; A4</span>
+    </h2>
+    <div class="content-area" style="gap: 15px; justify-content: flex-start; position: relative;">
+        <p style="font-size: 18px; text-align: center; margin-bottom: 10px;">Two mechanisms operate inside the deterministic envelope.</p>
+        
+        <div class="two-column" style="gap: 30px; align-items: stretch; margin-bottom: 10px;">
+            <div class="bento-box" style="padding: 25px; border-left: 3px solid #00e5ff;">
+                <div class="tech-tag" style="border-color: #00e5ff; color: #00e5ff; font-size: 10px; margin-bottom: 12px; padding: 2px 6px;">MECHANISM 1</div>
+                <h3 style="color: #00e5ff; margin-bottom: 10px; font-size: 18px;">Multi-path execution graphs</h3>
+                <p style="font-size: 13px; line-height: 1.5; margin: 0;">The compiled graph contains multiple valid execution paths. Runtime selection among them is driven by signal accumulated from deployed behaviour — which path performed best under which conditions. The <strong>space</strong> of possible executions is bounded at compile time; the <strong>selection within that space</strong> adapts as the system learns in the field. Learning at the graph-topology level, not the model level.</p>
+            </div>
+            
+            <div class="bento-box" style="padding: 25px; border-left: 3px solid #ccff00;">
+                <div class="tech-tag" style="border-color: #ccff00; color: #ccff00; font-size: 10px; margin-bottom: 12px; padding: 2px 6px;">MECHANISM 2</div>
+                <h3 style="color: #ccff00; margin-bottom: 10px; font-size: 18px;">Embedded learned models</h3>
+                <p style="font-size: 13px; line-height: 1.5; margin: 0;">Machine-learning and Liquid Neural Network (LNN) models can be embedded inside the deterministic graph as first-class nodes. Their input boundaries, output contracts, versioning, and update semantics are type-checked and audit-traced — learning operates under the same governance envelope as every other node.</p>
+            </div>
+        </div>
+        
+        <div class="bento-box" style="padding: 20px 25px; border-left: 4px solid #ccff00; background: rgba(204, 255, 0, 0.05); margin-bottom: 5px;">
+            <p style="font-size: 14px; font-style: italic; color: #cbd5e1; margin: 0;">Determinism is defined precisely: <strong>given the same input event stream and the same learned state, the system produces the same output trace, every time</strong>. When learned state updates — a new path weighting, a new model version — the change is versioned, audit-traced, and reproducible. Identical state + identical input &rarr; identical output, always.</p>
+        </div>
+        
+        <p style="font-size: 13px; color: #94a3b8; text-align: center; margin-top: 5px;">The trade-off that defeats most "governed AI" architectures — "you can have AI that learns, or AI that is auditable, not both" — does not apply here.</p>
+        
+        <div style="position: absolute; bottom: 0; right: 0; text-align: right;">
+            <span style="font-family: 'Roboto Mono', monospace; font-size: 8px; color: #64748b;">MECHANISM DETAIL COVERED BY PENDING PATENTS &middot; NOT DISCLOSED HERE</span>
+        </div>
+    </div>
+</div>
+
+<!-- APPENDIX A5 -->
+
+<script>
+    const slides = Array.from(document.querySelectorAll('.slide-container'));
+    let currentSlideIndex = 0;
+
+    // Initialize presentation: hide all, show first
+    slides.forEach(s => s.classList.remove('active'));
+    if (slides.length > 0) slides[0].classList.add('active');
+
+    function showSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+    }
+
+    // Simple Presentation Navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            showSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            showSlide(currentSlideIndex - 1);
+        }
+    });
+</script>
+</body>
 </html>
